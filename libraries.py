@@ -7,7 +7,7 @@ smtpObj.starttls()
 
 # Use your actual Gmail address and either your regular password (if less secure app access is enabled)
 # or the app password generated if you have 2FA enabled
-smtpObj.login('sreyvang.phon@student.passerellesnumeriques.org', 'sjzs vnzk wyja abts')
+smtpObj.login('sreyvang.phon@student.passerellesnumeriques.org', 'zrac ukii mgfx ioro')
 
 # Construct the email
 msg = MIMEText('This is the body of the email')
