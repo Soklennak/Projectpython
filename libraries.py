@@ -37,14 +37,9 @@ html = """\
 <html>
   <head></head>
   <body>
-<<<<<<< HEAD
-    <p>Hello,<br>
-      This is the <b>HTML</b> version of the email!</p>
-=======
     <p>This is an e-mail message to be sent in <b>HTML format</b></p>
     <p><b>This is HTML message.</b></p>
     <h1>This is headline.</h1>
->>>>>>> dbb3a0429a679d3a494c1cb7d3aff941261878e4
   </body>
 </html>
 """
