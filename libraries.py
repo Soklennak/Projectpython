@@ -1,48 +1,57 @@
 import smtplib
+from email.mime.text import MIMEText
+
+# Set up the server
+smtpObj = smtplib.SMTP('smtp.gmail.com', 587)
+smtpObj.starttls()
+
+# Use your actual Gmail address and either your regular password (if less secure app access is enabled)
+# or the app password generated if you have 2FA enabled
+smtpObj.login('sreyvang.phon@student.passerellesnumeriques.org', 'sjzs vnzk wyja abts')
+
+# Construct the email
+msg = MIMEText('This is the body of the email')
+msg['Subject'] = 'Test Email'
+msg['From'] = 'sreyvang.phon@student.passerellesnumeriques.org'
+msg['To'] = 'phonsreyvang89@gmail.com'
+
+# Send the email
+smtpObj.sendmail('sreyvang.phon@student.passerellesnumeriques.org', ['phonsreyvang89@gmail.com'], msg.as_string())
+smtpObj.quit()
+import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-# Email details
-sender_email = "soklennak01@gmail.com"
-receiver_email = "soklen.nak@student.passerellesnumeriques.org"
-password = "#lenylove*918"  # Use App Password if 2FA is enabled
+# Email content
+sender = 'sreyvang.phon@student.passerellesnumeriques.org'
+receivers = ['phonsreyvang89@gmail.com']
 
-# Create a multipart message
-msg = MIMEMultipart("alternative")
-msg['From'] = sender_email
-msg['To'] = receiver_email
-msg['Subject'] = "Test Email with Plain Text and HTML"
+# Create message container - the correct MIME type is multipart/alternative.
+msg = MIMEMultipart('alternative')
+msg['From'] = 'From Person <sreyvang.phon@student.passerellesnumeriques.org>'
+msg['To'] = 'To Person <phonsreyvang89@gmail.com>'
+msg['Subject'] = 'SMTP HTML e-mail test'
 
-# Create the plain-text and HTML versions of the message
-text = "Hello, this is the plain text version of the email."
+# HTML message content
 html = """\
 <html>
+  <head></head>
   <body>
-    <p>Hello,<br>
-       This is the <b>HTML</b> version of the email!</p>
+    <p>This is an e-mail message to be sent in <b>HTML format</b></p>
+    <p><b>This is HTML message.</b></p>
+    <h1>This is headline.</h1>
   </body>
 </html>
 """
 
-# Attach both the plain text and HTML parts to the email
-msg.attach(MIMEText(text, 'plain'))
-msg.attach(MIMEText(html, 'html'))
+# Attach HTML content to the email
+part2 = MIMEText(html, 'html')
+msg.attach(part2)
 
-# Set up the server and send email
+# Connect to SMTP server and send email
 try:
-    # Connect to Gmail's SMTP server (for Gmail use 'smtp.gmail.com' and port 587)
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.starttls()  # Secure connection
-    server.login(sender_email, password)  # Log in to the server
-    
-    # Send the email
-    text = msg.as_string()
-    server.sendmail(sender_email, receiver_email, text)
-    
-    print("Email sent successfully!")
-    
-except Exception as e:
-    print(f"Failed to send email: {e}")
-    
-finally:
-    server.quit()  # Close the connection to the server
+   smtpObj = smtplib.SMTP('localhost')
+   smtpObj.sendmail(sender, receivers, msg.as_string())
+   print("Successfully sent email")
+except smtplib.SMTPException as e:
+   print(f"Error: unable to send email. Error message: {str(e)}")
