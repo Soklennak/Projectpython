@@ -50,8 +50,8 @@ msg.attach(part2)
 
 # Connect to SMTP server and send email
 try:
-   smtpObj = smtplib.SMTP('localhost')
-   smtpObj.sendmail(sender, receivers, msg.as_string())
-   print("Successfully sent email")
+  smtpObj = smtplib.SMTP('localhost')
+  smtpObj.sendmail(sender, receivers, msg.as_string())
+  print("Successfully sent email")
 except smtplib.SMTPException as e:
-   print(f"Error: unable to send email. Error message: {str(e)}")
+  print(f"Error: unable to send email. Error message: {str(e)}")
