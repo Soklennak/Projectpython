@@ -19,7 +19,7 @@ html = """\
 <html>
   <body>
     <p>Hello,<br>
-       This is the <b>HTML</b> version of the email!</p>
+      This is the <b>HTML</b> version of the email!</p>
   </body>
 </html>
 """
