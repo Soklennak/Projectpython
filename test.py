@@ -60,10 +60,10 @@ def schedule_email(date_time):
 
 # Set the date and time for sending the email
 # Example: November 19, 2024, at 14:45
-scheduled_time = datetime(2024, 11, 19, 15, 55)
+scheduled_time = datetime(2024, 11, 19, 16, 18)
 
 # Start the scheduler
-print(f"Email will be sent at {scheduled_time}")
+print(f"Email will be send at {scheduled_time}")
 schedule_email(scheduled_time)
 
 
