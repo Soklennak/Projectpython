@@ -55,3 +55,5 @@ try:
    print("Successfully sent email")
 except smtplib.SMTPException as e:
    print(f"Error: unable to send email. Error message: {str(e)}")
+
+
