@@ -21,9 +21,6 @@ email_user = "sreyvang.phon@student.passerellesnumeriques.org"  # Replace with y
 email_password = "whwn crbx rvgn zqui"  # Replace with your email password or app password
 
 
-    
-
-
 def schedule_email(date_time):
     while True:
         # Check if current time matches the specified time
@@ -59,8 +56,8 @@ def schedule_email(date_time):
         time.sleep(1)  # Avoid excessive CPU usage
 
 # Set the date and time for sending the email
-# Example: November 19, 2024, at 14:45
-scheduled_time = datetime(2024, 11, 19, 16, 18)
+# Example: November 19, 2024, at 14:9
+scheduled_time = datetime(2024, 11, 24, 3, 34)
 
 # Start the scheduler
 print(f"Email will be send at {scheduled_time}")

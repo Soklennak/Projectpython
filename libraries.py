@@ -7,29 +7,29 @@ smtpObj.starttls()
 
 # Use your actual Gmail address and either your regular password (if less secure app access is enabled)
 # or the app password generated if you have 2FA enabled
-smtpObj.login('sreyvang.phon@student.passerellesnumeriques.org', 'zrac ukii mgfx ioro')
+smtpObj.login('soklen.nak@student.passerellesnumeriques.org', 'pgfp gxpz fjbr qkll')
 
 # Construct the email
-msg = MIMEText('This is the body of the email')
-msg['Subject'] = 'Test Email'
-msg['From'] = 'sreyvang.phon@student.passerellesnumeriques.org'
-msg['To'] = 'phonsreyvang89@gmail.com'
+msg = MIMEText('This is the body of the email testing sending')
+msg['Subject'] = 'Test Email sreyvang '
+msg['From'] = 'soklen.nak@student.passerellesnumeriques.org'
+msg['To'] = 'soklennak01@gmail.com'
 
 # Send the email
-smtpObj.sendmail('sreyvang.phon@student.passerellesnumeriques.org', ['phonsreyvang89@gmail.com'], msg.as_string())
+smtpObj.sendmail('soklen.nak@student.passerellesnumeriques.org', ['soklennak01@gmail.com'], msg.as_string())
 smtpObj.quit()
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 # Email content
-sender = 'sreyvang.phon@student.passerellesnumeriques.org'
-receivers = ['phonsreyvang89@gmail.com']
+sender = 'soklen.nak@student.passerellesnumeriques.org'
+receivers = ['soklennak01@gmail.com']
 
 # Create message container - the correct MIME type is multipart/alternative.
 msg = MIMEMultipart('alternative')
-msg['From'] = 'From Person <sreyvang.phon@student.passerellesnumeriques.org>'
-msg['To'] = 'To Person <phonsreyvang89@gmail.com>'
+msg['From'] = 'From Person <soklrn.nak@student.passerellesnumeriques.org>'
+msg['To'] = 'To Person <soklennak01@gmail.com>'
 msg['Subject'] = 'SMTP HTML e-mail test'
 
 # HTML message content
@@ -43,15 +43,17 @@ html = """\
   </body>
 </html>
 """
-
 # Attach HTML content to the email
 part2 = MIMEText(html, 'html')
 msg.attach(part2)
 
 # Connect to SMTP server and send email
 try:
-  smtpObj = smtplib.SMTP('localhost')
-  smtpObj.sendmail(sender, receivers, msg.as_string())
-  print("Successfully sent email")
+   smtpObj = smtplib.SMTP('localhost')
+   smtpObj.sendmail(sender, receivers, msg.as_string())
+   print("Successfully sent email")
 except smtplib.SMTPException as e:
-  print(f"Error: unable to send email. Error message: {str(e)}")
+   print(f"Error: unable to send email. Error message: {str(e)}")
+
+  
+
