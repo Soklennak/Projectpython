@@ -9,23 +9,6 @@ from email import encoders
 import os
 
 
-<<<<<<< HEAD
-def schedule_email(date_time):
-    while True:
-        # Check if current time matches the specified time
-        now = datetime.now()
-        if now >= date_time:
-            
-            # Email Sending Function
-            def send_email(to_email, subject, body):
-                try:
-                    # Create Email Message
-                    message = MIMEMultipart()
-                    message["From"] = email_user
-                    message["To"] = to_email
-                    message["Subject"] = subject
-                    message.attach(MIMEText(body, "plain"))
-=======
 def send_bulk_emails(smtp_server, port, sender_email, sender_password, subject, body, excel_file, attachment_path):
     try:
         # Read the Excel file
@@ -76,7 +59,6 @@ def browse_file(entry):
     filename = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx *.xls")])
     entry.delete(0, tk.END)
     entry.insert(0, filename)
->>>>>>> 4261a733abee4efc11359d06e0ca93e61d6269c5
 
 def browse_attachment(entry):
     filename = filedialog.askopenfilename()
@@ -99,15 +81,6 @@ def send_emails():
     
     send_bulk_emails(smtp_server, port, sender_email, sender_password, subject, body, excel_file, attachment_path)
 
-<<<<<<< HEAD
-# Set the date and time for sending the email
-# Example: November 19, 2024, at 14:9
-scheduled_time = datetime(2024, 11, 24, 3, 34)
-
-# Start the scheduler
-print(f"Email will be send at {scheduled_time}")
-schedule_email(scheduled_time)
-=======
 # Create the GUI
 root = tk.Tk()
 root.title("Email Automation System")
@@ -117,7 +90,6 @@ root.geometry("500x600")
 tk.Label(root, text="SMTP Server:").grid(row=0, column=0, sticky="w", padx=10, pady=5)
 smtp_entry = tk.Entry(root, width=40)
 smtp_entry.grid(row=0, column=1, padx=10, pady=5)
->>>>>>> 4261a733abee4efc11359d06e0ca93e61d6269c5
 
 # Port
 tk.Label(root, text="Port:").grid(row=1, column=0, sticky="w", padx=10, pady=5)
