@@ -1,37 +1,31 @@
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
 from openpyxl import load_workbook
-from datetime import datetime
+from datetime import datetime, timedelta
 import tkinter as tk
 from tkinter import filedialog, messagebox
 import threading
 import time
+import os
 
 # Initialize the main window
 root = tk.Tk()
 root.title("Email Scheduler")
-root.geometry("600x700")
+root.geometry("600x700")  # Adjusted window height
 root.configure(bg="#f7f9fc")  # Light background for a clean UI
 root.resizable(width="false", height="false")
 
-
-# Set the application icon (replace with the correct icon file path)
-try:
-    icon = tk.PhotoImage(file="image.png")  # Ensure 'image.png' exists in the same directory
-    root.iconphoto(True, icon)
-except Exception as e:
-    print(f"Failed to load icon: {e}")
-
-# Global variables for the Excel file and email credentials
+# Global variables for the Excel file, email credentials, and attachments
 email_user = ""
 email_password = ""
 excel_file_path = ""
+attachments = []
 
 # SMTP Server Configuration
 smtp_server = "smtp.gmail.com"
 smtp_port = 587
-
 
 # Function to select the Excel file
 def browse_file():
@@ -39,8 +33,14 @@ def browse_file():
     excel_file_path = filedialog.askopenfilename(filetypes=[("Excel Files", "*.xlsx;*.xls")])
     excel_file_label.config(text=excel_file_path if excel_file_path else "No file selected")
 
+# Function to select attachments
+def browse_attachments():
+    global attachments
+    files = filedialog.askopenfilenames(filetypes=[("All Files", "*.*")])
+    attachments.extend(files)
+    attachment_label.config(text="Attachments: " + ", ".join(os.path.basename(file) for file in attachments))
 
-# Function to send email
+# Function to send email with attachments
 def send_email(to_email, subject, body):
     try:
         message = MIMEMultipart()
@@ -49,6 +49,14 @@ def send_email(to_email, subject, body):
         message["Subject"] = subject
         message.attach(MIMEText(body, "plain"))
 
+        # Attach all files
+        for file_path in attachments:
+            with open(file_path, "rb") as file:
+                part = MIMEApplication(file.read(), Name=os.path.basename(file_path))
+                part['Content-Disposition'] = f'attachment; filename="{os.path.basename(file_path)}"'
+                message.attach(part)
+
+        # Send email via SMTP server
         with smtplib.SMTP(smtp_server, smtp_port) as server:
             server.starttls()
             server.login(email_user, email_password)
@@ -57,9 +65,8 @@ def send_email(to_email, subject, body):
     except Exception as e:
         print(f"Failed to send email to {to_email}: {e}")
 
-
-# Function to schedule email
-def schedule_email(scheduled_time, subject, body):
+# Function to schedule and send multiple emails at different times
+def schedule_email(scheduled_time):
     while True:
         now = datetime.now()
         if now >= scheduled_time:
@@ -68,25 +75,28 @@ def schedule_email(scheduled_time, subject, body):
                 sheet = workbook.active
 
                 for row in sheet.iter_rows(min_row=2, values_only=True):
-                    if len(row) >= 2 and row[1]:
+                    if len(row) >= 4 and row[1]:
                         name = row[0] or "User"
                         email = row[1]
+                        subject = row[2]
+                        body = row[3]
+                        
+                        # Personalize email with recipient's name
                         personalized_body = body.replace("{name}", name)
+                        
                         send_email(email, subject, personalized_body)
-                    else:
-                        print(f"Skipping invalid row: {row}")
+                        print(f"Sent email to {email} with subject: {subject}")
 
                 messagebox.showinfo("Success", "Emails sent successfully!")
-                break
+                return  # Exit after sending all emails for the current scheduled time
             except Exception as e:
                 messagebox.showerror("Error", f"Failed to read Excel file or send emails: {e}")
-                break
-        time.sleep(1)
-
+                return
+        time.sleep(30)  # Sleep for a short time before checking the time again
 
 # Function to start the scheduling process
 def start_scheduling():
-    global email_user, email_password
+    global email_user, email_password, attachments
 
     email_user = sender_email_entry.get()
     if not email_user:
@@ -103,7 +113,7 @@ def start_scheduling():
         return
 
     try:
-        scheduled_date = datetime.strptime(schedule_date_entry.get(), "%Y-%m-%d")
+        scheduled_date = datetime.strptime(schedule_date_entry.get(), "%Y-%m-%d")  # Single date
         scheduled_time = datetime.strptime(schedule_time_entry.get(), "%H:%M")
         scheduled_time = scheduled_date.replace(hour=scheduled_time.hour, minute=scheduled_time.minute)
 
@@ -111,17 +121,14 @@ def start_scheduling():
             messagebox.showerror("Error", "Scheduled time must be in the future.")
             return
 
-        subject = subject_entry.get()
-        body = body_entry.get("1.0", "end-1c")
-
-        scheduling_thread = threading.Thread(target=schedule_email, args=(scheduled_time, subject, body))
+        # Starting a separate thread to handle email sending
+        scheduling_thread = threading.Thread(target=schedule_email, args=(scheduled_time,))
         scheduling_thread.start()
 
         messagebox.showinfo("Scheduled", f"Emails will be sent at {scheduled_time}.")
 
     except ValueError:
         messagebox.showerror("Error", "Invalid date/time format. Use YYYY-MM-DD for date and HH:MM for time.")
-
 
 # UI Elements with better spacing and design
 tk.Label(root, text="Email Scheduler", bg="#f7f9fc", fg="#34495e", font=("Helvetica", 16, "bold")).pack(pady=10)
@@ -140,13 +147,11 @@ excel_file_label.pack(pady=5)
 browse_button = tk.Button(root, text="Browse", command=browse_file, font=("Helvetica", 10), bg="#3498db", fg="white")
 browse_button.pack(pady=5)
 
-tk.Label(root, text="Subject Line:", bg="#f7f9fc", font=("Helvetica", 12), fg="#2c3e50").pack(pady=5)
-subject_entry = tk.Entry(root, width=45, font=("Helvetica", 10), bg="#ecf0f1", fg="#2c3e50")
-subject_entry.pack(pady=5)
-
-tk.Label(root, text="Email Body:", bg="#f7f9fc", font=("Helvetica", 12), fg="#2c3e50").pack(pady=5)
-body_entry = tk.Text(root, width=45, height=5, font=("Helvetica", 10), bg="#ecf0f1", fg="#2c3e50")
-body_entry.pack(pady=5)
+tk.Label(root, text="Select Attachments:", bg="#f7f9fc", font=("Helvetica", 12), fg="#2c3e50").pack(pady=5)
+attachment_label = tk.Label(root, text="No files selected", bg="#f7f9fc", font=("Helvetica", 10), fg="#2c3e50")
+attachment_label.pack(pady=5)
+attachment_button = tk.Button(root, text="Browse", command=browse_attachments, font=("Helvetica", 10), bg="#3498db", fg="white")
+attachment_button.pack(pady=5)
 
 tk.Label(root, text="Schedule Date (YYYY-MM-DD):", bg="#f7f9fc", font=("Helvetica", 12), fg="#2c3e50").pack(pady=5)
 schedule_date_entry = tk.Entry(root, width=45, font=("Helvetica", 10), bg="#ecf0f1", fg="#2c3e50")
