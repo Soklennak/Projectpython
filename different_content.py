@@ -14,7 +14,7 @@ import os
 root = tk.Tk()
 root.title("Email Scheduler")
 root.geometry("600x700")  # Adjusted window height
-root.configure(bg="#f7f9fc")  # Light background for a clean UI
+root.configure(bg="#a9cce3")  # Light background for a clean UI
 root.resizable(width="false", height="false")
 
 # Global variables for the Excel file, email credentials, and attachments
@@ -131,37 +131,45 @@ def start_scheduling():
         messagebox.showerror("Error", "Invalid date/time format. Use YYYY-MM-DD for date and HH:MM for time.")
 
 # UI Elements with better spacing and design
-tk.Label(root, text="Email Scheduler", bg="#f7f9fc", fg="#34495e", font=("Helvetica", 16, "bold")).pack(pady=10)
+tk.Label(root, text="Email Scheduler", bg="#a9cce3", fg="#34495e", font=("Helvetica", 16, "bold")).pack(pady=10)
 
-tk.Label(root, text="Sender Email:", bg="#f7f9fc", font=("Helvetica", 12), fg="#2c3e50").pack(pady=5)
+tk.Label(root, text="Sender Email:", bg="#a9cce3", font=("Helvetica", 12), fg="#2c3e50").pack(pady=5)
 sender_email_entry = tk.Entry(root, width=45, font=("Helvetica", 10), bg="#ecf0f1", fg="#2c3e50")
 sender_email_entry.pack(pady=5)
 
-tk.Label(root, text="Email Password:", bg="#f7f9fc", font=("Helvetica", 12), fg="#2c3e50").pack(pady=5)
+tk.Label(root, text="Email Password:", bg="#a9cce3", font=("Helvetica", 12), fg="#2c3e50").pack(pady=5)
 password_entry = tk.Entry(root, width=45, font=("Helvetica", 10), bg="#ecf0f1", fg="#2c3e50", show="*")
 password_entry.pack(pady=5)
 
-tk.Label(root, text="Select Excel File:", bg="#f7f9fc", font=("Helvetica", 12), fg="#2c3e50").pack(pady=5)
-excel_file_label = tk.Label(root, text="No file selected", bg="#f7f9fc", font=("Helvetica", 10), fg="#2c3e50")
+tk.Label(root, text="Select Excel File:", bg="#a9cce3", font=("Helvetica", 12), fg="#2c3e50").pack(pady=5)
+excel_file_label = tk.Label(root, text="No file selected", bg="#a9cce3", font=("Helvetica", 10), fg="#2c3e50")
 excel_file_label.pack(pady=5)
-browse_button = tk.Button(root, text="Browse", command=browse_file, font=("Helvetica", 10), bg="#3498db", fg="white")
+browse_button = tk.Button(root, text="Browse", command=browse_file, font=("Helvetica", 10), bg="green", fg="white")
 browse_button.pack(pady=5)
 
-tk.Label(root, text="Select Attachments:", bg="#f7f9fc", font=("Helvetica", 12), fg="#2c3e50").pack(pady=5)
-attachment_label = tk.Label(root, text="No files selected", bg="#f7f9fc", font=("Helvetica", 10), fg="#2c3e50")
+tk.Label(root, text="Select Attachments:", bg="#a9cce3", font=("Helvetica", 12), fg="#2c3e50").pack(pady=5)
+attachment_label = tk.Label(root, text="No files selected", bg="#a9cce3", font=("Helvetica", 10), fg="#2c3e50")
 attachment_label.pack(pady=5)
-attachment_button = tk.Button(root, text="Browse", command=browse_attachments, font=("Helvetica", 10), bg="#3498db", fg="white")
+attachment_button = tk.Button(root, text="Browse", command=browse_attachments, font=("Helvetica", 10), bg="green", fg="white")
 attachment_button.pack(pady=5)
 
-tk.Label(root, text="Schedule Date (YYYY-MM-DD):", bg="#f7f9fc", font=("Helvetica", 12), fg="#2c3e50").pack(pady=5)
+tk.Label(root, text="Schedule Date (YYYY-MM-DD):", bg="#a9cce3", font=("Helvetica", 12), fg="#2c3e50").pack(pady=5)
 schedule_date_entry = tk.Entry(root, width=45, font=("Helvetica", 10), bg="#ecf0f1", fg="#2c3e50")
 schedule_date_entry.pack(pady=5)
 
-tk.Label(root, text="Schedule Time (HH:MM):", bg="#f7f9fc", font=("Helvetica", 12), fg="#2c3e50").pack(pady=5)
+tk.Label(root, text="Schedule Time (HH:MM):", bg="#a9cce3", font=("Helvetica", 12), fg="#2c3e50").pack(pady=5)
 schedule_time_entry = tk.Entry(root, width=45, font=("Helvetica", 10), bg="#ecf0f1", fg="#2c3e50")
 schedule_time_entry.pack(pady=5)
 
-start_button = tk.Button(root, text="Start Scheduler", command=start_scheduling, bg="#27ae60", fg="white", font=("Helvetica", 12, "bold"))
-start_button.pack(pady=20)
+# Button container to hold both buttons in the same line
+button_frame = tk.Frame(root, bg="#a9cce3")
+button_frame.pack(pady=20)
+
+start_button = tk.Button(button_frame, text="Start Scheduler", command=start_scheduling, bg="blue", fg="white", font=("Helvetica", 12, "bold"))
+start_button.pack(side='left', padx=5)  # Add padding between buttons
+
+# Exit button next to start button
+exit_button = tk.Button(button_frame, text="Exit", command=root.quit, bg="red", fg="white", font=("Helvetica", 12, "bold"))
+exit_button.pack(side='left', padx=5)  # Add padding between buttons
 
 root.mainloop()
